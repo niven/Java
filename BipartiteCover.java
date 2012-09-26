@@ -12,6 +12,32 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 
+/**
+ * Find a minimal cover for a bipartite set.
+ * 
+ *  Basically it solves this puzzle:
+ *  http://www.spotify.com/uk/jobs/tech/bilateral-projects/
+ *  
+ *  The solution they are looking for might really be "figure out what this kind of problem is and then use google"
+ *  
+ *  Then you'll find http://en.wikipedia.org/wiki/Hopcroft%E2%80%93Karp_algorithm
+ *  Which you can implement if you can figure out what all the jargon means.
+ *  
+ *  My implementation is basically
+ *  1. first divide the "teams" into disjoint subsets
+ *  2. find minimal cover for each "team"
+ *  2a. do this by basically doing a shortest path search (the number of unreached teams isthe cost of the vertex) 
+ *  
+ *  Implementation details for the curious:
+ *  - we make and extend Cover objects that are a list of "employee" ids and the "teams" they can reach
+ *  - these are stored in a TreeSet, which is ordered as least-employees-most-teams-reached
+ *  - extending a cover is then simply making 2 copies and picking a team it can't reach: 1 copy gets team member A,
+ *  the other gets team member B.
+ *  - The TreeSet ensures we always work on the shortest path
+ *  - everything is BitSets so we don't run out of heap space
+ *  - doing the puzzle with 10K teams and 2K employees runs in about 7 seconds for me.
+ *
+ */
 public class BipartiteCover {
 
 	private static final int TEAM_COUNT = 10 * 1000;
